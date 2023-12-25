@@ -338,7 +338,7 @@
 			document.getElementById('img').prependChild(dlLink);
 			dlLink.click();
 			document.getElementById('img').removeChild(dlLink);
-			//document.getElementById('img').removeChild(canvas);
+			document.getElementById('img').removeChild(canvas);
 		}
 
         $(function(){
@@ -346,11 +346,6 @@
                 var code = $("#code").val().toUpperCase();
                 var type = $("#type").val()
                 refreshit(code, type);
-				
-				html2canvas(document.getElementById('carplate')).then(function(canvas) {
-					document.getElementById('img').prependChild(canvas);
-					exportCanvasAsPNG(canvas,'carplate');
-				});
             })
 			
             $("#save").click(function(){
