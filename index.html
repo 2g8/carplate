@@ -327,17 +327,36 @@
 		Node.prototype.prependChild = function (newNode){
 			this.insertBefore(newNode,this.firstChild);
 		}
+		
+		function exportCanvasAsPNG(canvas, fileName) {
+			var MIME_TYPE = "image/png";
+			var imgURL = canvas.toDataURL(MIME_TYPE);
+			var dlLink = document.createElement('a');
+			dlLink.download = fileName;
+			dlLink.href = imgURL;
+			dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+			document.getElementById('img').prependChild(dlLink);
+			dlLink.click();
+			document.getElementById('img').removeChild(dlLink);
+			//document.getElementById('img').removeChild(canvas);
+		}
 
         $(function(){
             $("#show").click(function(){
                 var code = $("#code").val().toUpperCase();
                 var type = $("#type").val()
-                refreshit(code, type)
+                refreshit(code, type);
+				
+				html2canvas(document.getElementById('carplate')).then(function(canvas) {
+					document.getElementById('img').prependChild(canvas);
+					exportCanvasAsPNG(canvas,'carplate');
+				});
             })
 			
             $("#save").click(function(){
 				html2canvas(document.getElementById('carplate')).then(function(canvas) {
 					document.getElementById('img').prependChild(canvas);
+					exportCanvasAsPNG(canvas,'carplate');
 				});
             })
 
@@ -366,9 +385,9 @@
             <option value="white">白底黑字</option>
         </select>
 
-        <input id="show" type="button" value="显示效果"/>
+        <input id="show" type="button" value="预览效果"/>
 		
-        <input id="save" type="button" value="生成图片"/>
+        <input id="save" type="button" value="生成并保存图片"/>
 
         <hr>
         
