@@ -7,6 +7,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
         <script src="jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.2.8/es6-promise.min.js" integrity="sha512-JMK7ImCd/9VxQM7FWvAT3njqo5iGKkWcOax6Bwzuq48xxFd7/jekKcgN+59ZRwBoEpZvv6Jkwh3fDGrBVWX5vA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         <style>
             .sign {
@@ -321,12 +323,22 @@
             }
             return ""
         }
+		
+		Node.prototype.prependChild = function (newNode){
+			this.insertBefore(newNode,this.firstChild);
+		}
 
         $(function(){
             $("#show").click(function(){
-                var code = $("#code").val()
+                var code = $("#code").val().toUpperCase();
                 var type = $("#type").val()
                 refreshit(code, type)
+            })
+			
+            $("#save").click(function(){
+				html2canvas(document.getElementById('carplate')).then(function(canvas) {
+					document.getElementById('img').prependChild(canvas);
+				});
             })
 
             $(".example").click(function(){
@@ -346,7 +358,7 @@
     <bodd>
         <h1> 小汽车-车牌预览（在线版）</h1>
 
-        <input id="code" value="GOBUDDY"/> 
+        <input id="code" value="京AF0236"/> 
         <select id="type">
             <option value="blue">蓝色白字</option>
             <option value="black">黑底白字</option>
@@ -354,7 +366,9 @@
             <option value="white">白底黑字</option>
         </select>
 
-        <input id="show" type="button" value="显示"/>
+        <input id="show" type="button" value="显示效果"/>
+		
+        <input id="save" type="button" value="生成图片"/>
 
         <hr>
         
@@ -383,12 +397,14 @@
 
         <hr>
 
-        <div class="sign" style="display:none">
+        <div id="carplate" class="sign" style="display:none">
             <div class="sign-loop"></div>
+			<!--
             <div class="mark mark1"></div>
             <div class="mark mark2"></div>
             <div class="mark mark3"></div>
             <div class="mark mark4"></div>
+			-->
 
             <div class="symbol s0" ></div>
             <div class="symbol s1"></div>
@@ -399,6 +415,7 @@
             <div class="symbol s5"></div>
             <div class="symbol s6"></div>
         </div>
+        <div id="img"></div>
         
         <div>
             <b>注解:</b>
